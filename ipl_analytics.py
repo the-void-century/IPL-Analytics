@@ -1,5 +1,6 @@
 import csv
 import matplotlib.pyplot as plt
+from operator import add
 
 scores_by_team={}
 batsman_to_run={}
@@ -58,12 +59,6 @@ def teams():
                 else:
                     winners_by_team[matches["winner"]][matches["season"]]+=1
 
-
-            
-
-
-
-            
     with open('data/deliveries.csv') as csv_file:
         deliveries_reader=csv.DictReader(csv_file)
         for matches in deliveries_reader:
@@ -96,9 +91,17 @@ def teams():
                     bowlers_runs_conceded[matches["bowler"]]+=int(matches["total_runs"])
             
 
-
-
-
+def add_two_lists(list1,list2):
+    list3=[0]*max(len(list1),len(list2))
+    i,j=0,0
+    while i<len(list1) and i<len(list2):
+        list3[i]=list1[i]+list2[i]
+        i+=1
+    while i<len(list1):
+        list3[i]=list1[i]
+    while i<len(list2):
+        list3[i]=list2[i]
+    return list3
 
 def plot_total_runs():
     color_count=0
@@ -155,12 +158,14 @@ def games_by_season():
     color_count=0
     team_list=list(matches_by_team.keys())
     #print(matches_by_team)
+    baseline=[0]*len(team_list)
     for team in matches_by_team:
         years=list(matches_by_team[team].keys())
         match=list(matches_by_team[team].values())
         print(team,years,match)
         years,match=zip(*sorted(zip(years,match)))
         plt.bar(years,match,color=colors[color_count])
+        #baseline = add_two_lists(baseline,match)
         color_count+=1
     plt.ylabel("Matches")
     plt.xlabel("Years")
