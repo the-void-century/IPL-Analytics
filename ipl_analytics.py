@@ -95,18 +95,9 @@ def teams():
             
 
 def add_two_lists(list1,list2):
-    list3=[0]*max(len(list1),len(list2))
-    i,j=0,0
-    while i<len(list1) and i<len(list2):
-        list3[i]=list1[i]+list2[i]
-        i+=1
-    while i<len(list1):
-        list3[i]=list1[i]
-        i+=1
-    while i<len(list2):
-        list3[i]=list2[i]
-        i+=1
-    return list3
+    for i in range(len(list1)):
+        list1[i]+=list2[i]
+    return list1
 
 def plot_total_runs():
     color_count=0
