@@ -14,7 +14,7 @@ id_to_year={}
 bowlers_runs_conceded={}
 bowlers_balls_played={}
 colors=["black","dimgrey","darkgrey","olive","maroon","salmon","orangered","saddlebrown","burlywood","goldenrod","lawngreen","g","dodgerblue","magenta"]
-
+years=[0,0,0,0,0,0,0,0,0]
 
 def teams():
     with open('data/umpires.csv') as csv_file:
@@ -31,7 +31,8 @@ def teams():
             umpire_list.add(matches["umpire1"])
             umpire_list.add(matches["umpire2"])
             if matches["team1"] not in matches_by_team:
-                game_by_season={matches["season"]:1}
+                game_by_season={'2008':0,'2009':0,'2010':0,'2011':0,'2012':0,'2013':0,'2014':0,'2015':0,'2016':0,'2017':0}
+                game_by_season[matches["season"]]+=1
                 matches_by_team[matches["team1"]]=game_by_season
             else:
                 if matches["season"] not in matches_by_team[matches["team1"]]:
@@ -39,7 +40,8 @@ def teams():
                 else:
                     matches_by_team[matches["team1"]][matches["season"]]+=1
             if matches["team2"] not in matches_by_team:
-                game_by_season={matches["season"]:1}
+                game_by_season={'2008':0,'2009':0,'2010':0,'2011':0,'2012':0,'2013':0,'2014':0,'2015':0,'2016':0,'2017':0}
+                game_by_season[matches["season"]]+=1
                 matches_by_team[matches["team2"]]=game_by_season
             else:
                 if matches["season"] not in matches_by_team[matches["team2"]]:
@@ -51,8 +53,9 @@ def teams():
             else:
                 matches_by_season[int(matches["season"])]+=1
             if matches["winner"] not in winners_by_team:
-                winner_by_season={matches["season"]:1}
-                winners_by_team[matches["winner"]]=winner_by_season
+                game_by_season={'2008':0,'2009':0,'2010':0,'2011':0,'2012':0,'2013':0,'2014':0,'2015':0,'2016':0,'2017':0}
+                game_by_season[matches["season"]]+=1
+                winners_by_team[matches["winner"]]=game_by_season
             else:
                 if matches["season"] not in winners_by_team[matches["winner"]]:
                     winners_by_team[matches["winner"]][matches["season"]]=1
@@ -99,8 +102,10 @@ def add_two_lists(list1,list2):
         i+=1
     while i<len(list1):
         list3[i]=list1[i]
+        i+=1
     while i<len(list2):
         list3[i]=list2[i]
+        i+=1
     return list3
 
 def plot_total_runs():
@@ -120,12 +125,15 @@ def plot_total_runs():
 
 
 def plot_top_batsmen():
-    x_axis=list(batsman_to_run.keys())
-    y_axis=list(batsman_to_run.values())
-    x_axis,y_axis=zip(*sorted(zip(x_axis,y_axis),reverse=True))
-    x_axis=x_axis[:10]
-    y_axis=y_axis[:10]
-    plt.bar(x_axis,y_axis,width=0.4)
+    #print(batsman_to_run)
+    batsmen=list(batsman_to_run.keys())
+    runs=list(batsman_to_run.values())
+    runs,batsmen=zip(*sorted(zip(runs,batsmen),reverse=True))
+    print(list(zip(*sorted((zip(batsmen,runs))))))
+    batsmen=list(batsmen[:10])
+    runs=list(runs[:10])
+    #print(batsmen,runs)
+    plt.bar(batsmen,runs,width=0.4)
     plt.xlabel("Batsmen")
     plt.ylabel("Runs")
     plt.title("Top 10 batsmen in RCB over the course of IPL")
@@ -133,17 +141,20 @@ def plot_top_batsmen():
     plt.show()
 
 def umpire_by_country():
-    print(umpire_list)
+    #print(umpire_list)
     country_count={}
     for i in umpire_list:
         if i=='':
             continue
-        if umpire_to_country[i]=="India":
+        if umpire_to_country[i]=='':
             continue
-        if umpire_to_country[i] not in country_count:
-            country_count[umpire_to_country[i]]=1
-        else:
-            country_count[umpire_to_country[i]]+=1
+        print(umpire_to_country[i])
+        if umpire_to_country[i]!=" India":
+            if umpire_to_country[i] not in country_count:
+                country_count[umpire_to_country[i]]=1
+            else:
+                country_count[umpire_to_country[i]]+=1
+    print(country_count)
     x_axis=list(country_count.keys())
     y_axis=list(country_count.values())
     plt.bar(x_axis,y_axis,width=0.4)
@@ -155,18 +166,21 @@ def umpire_by_country():
 
 
 def games_by_season():
+    """This function prints a stacked bar chart of games every season"""
     color_count=0
     team_list=list(matches_by_team.keys())
     #print(matches_by_team)
-    baseline=[0]*len(team_list)
+    baseline=[0]*10
+    print(matches_by_team)
     for team in matches_by_team:
         years=list(matches_by_team[team].keys())
-        match=list(matches_by_team[team].values())
+        match=list(matches_by_team[team].values())        
+        years,match=zip(*sorted(zip(years,match)))    
         print(team,years,match)
-        years,match=zip(*sorted(zip(years,match)))
-        plt.bar(years,match,color=colors[color_count])
-        #baseline = add_two_lists(baseline,match)
-        color_count+=1
+        plt.bar(years,match,bottom=baseline)
+        #print(baseline)
+        baseline = add_two_lists(baseline,match)
+        
     plt.ylabel("Matches")
     plt.xlabel("Years")
     plt.legend(team_list)
@@ -185,14 +199,14 @@ def matches_every_year():
     plt.show()
 
 def winner_by_season():
-    color_count=0
+    baseline=[0]*10
     team_list=list(winners_by_team.keys())
     for team in winners_by_team:
         years=list(winners_by_team[team].keys())
         match=list(winners_by_team[team].values())
         years,match=zip(*sorted(zip(years,match)))
-        plt.bar(years,match)
-        color_count+=1
+        plt.bar(years,match,bottom=baseline)
+        baseline=add_two_lists(baseline,match)
     plt.title("Stacked bar plot of winners by season by team")
     plt.legend(team_list)
     plt.xlabel("Years")
