@@ -95,11 +95,13 @@ def teams():
             
 
 def add_two_lists(list1,list2):
+    """A function for adding two lists of the same size"""
     for i in range(len(list1)):
         list1[i]+=list2[i]
     return list1
 
 def plot_total_runs():
+    """Plots total tuns scored by teams over the years in form of a line chart"""
     color_count=0
     print(scores_by_team)
     for team in scores_by_team:
@@ -116,6 +118,7 @@ def plot_total_runs():
 
 
 def plot_top_batsmen():
+    """Plots top 10 batsmen of all time in a bar graph format"""
     #print(batsman_to_run)
     batsmen=list(batsman_to_run.keys())
     runs=list(batsman_to_run.values())
@@ -132,6 +135,7 @@ def plot_top_batsmen():
     plt.show()
 
 def umpire_by_country():
+    """Plots a bar graph showcasing the number of different nationalities fo umpires and their frequencies"""
     #print(umpire_list)
     country_count={}
     for i in umpire_list:
@@ -158,7 +162,6 @@ def umpire_by_country():
 
 def games_by_season():
     """This function prints a stacked bar chart of games every season"""
-    color_count=0
     team_list=list(matches_by_team.keys())
     #print(matches_by_team)
     baseline=[0]*10
@@ -179,6 +182,7 @@ def games_by_season():
     plt.show()
 
 def matches_every_year():
+    """This function plots the bar graph of the number of matches played every year over the history of IPL"""
     years=list(matches_by_season.keys())
     match=list(matches_by_season.values())
     years,match=zip(*sorted(zip(years,match)))
@@ -190,6 +194,7 @@ def matches_every_year():
     plt.show()
 
 def winner_by_season():
+    """This function plots the stacked bar of winners by team by every season"""
     baseline=[0]*10
     team_list=list(winners_by_team.keys())
     for team in winners_by_team:
@@ -205,6 +210,7 @@ def winner_by_season():
     plt.show()
 
 def extra_runs_conceded():
+    """This function plots a bar chart of extra runs conceded by every team in 2016"""
     #print(id_to_year)
     teams=list(extra_run_by_team.keys())
     runs=list(extra_run_by_team.values())
@@ -216,6 +222,7 @@ def extra_runs_conceded():
     plt.show()
 
 def top_economical_bowler():
+    """Plots top 10 economical bowlers in 2015"""
     bowler_economy_rate={}
     for bowler in bowlers_balls_played:
         bowler_economy_rate[bowler]=((bowlers_runs_conceded[bowler]/bowlers_balls_played[bowler])*6)
@@ -232,6 +239,7 @@ def top_economical_bowler():
 
 
 def main():
+    """main function"""
     teams()
     while True:
         print("Please Enter the corresponding number to select an option: ")
