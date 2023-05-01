@@ -16,8 +16,8 @@ Libraries used:
 		 sudo apt install git
 - #### Clone the project in your local machine
 		git clone https://github.com/the-void-century/IPL-Analytics.git
-- #### Activate the virtual environment
-		source bin/activate
+- #### Install all the dependencies
+		pip -r requirements.txt
 - #### Start your desired code editor from the CLI while the virtual environment is activated
 		code .
 
